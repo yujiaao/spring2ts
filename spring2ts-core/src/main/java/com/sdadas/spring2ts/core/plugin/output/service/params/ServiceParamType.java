@@ -26,6 +26,8 @@ import java.lang.annotation.Annotation;
 import java.util.EnumSet;
 import java.util.Set;
 
+import static com.sdadas.spring2ts.core.utils.AnnotationUtils.logger;
+
 /**
  * @author Sławomir Dadas
  */
@@ -70,6 +72,13 @@ public enum ServiceParamType {
         if(Annotation.class.isAssignableFrom(type)) {
             Class<? extends Annotation> annotation = (Class<? extends Annotation>) this.type;
             Multimap<String, String> map = AnnotationUtils.getAnnotationAsMap(param, annotation);
+            assert map==null || map.size()>0: "Invalid annotation";
+
+            if(map==null || map.size()==0){
+                logger.warning("Invalid annotation:"+param);
+                return new ServiceParamProps();
+            }
+
             return new ServiceParamProps(map);
         }
         return new ServiceParamProps();

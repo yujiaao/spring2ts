@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
  * @author Sławomir Dadas
  */
 public enum TSModifier {
-    EXPORT, PRIVATE, PUBLIC, STATIC;
+    EXPORT, PRIVATE, PUBLIC, STATIC, ASYNC, FUNCTION;
 
     public static String getString(EnumSet<TSModifier> modifiers) {
         if(modifiers.isEmpty()) return "";

@@ -90,6 +90,7 @@ public class ServiceRequestProps {
     }
 
     private List<ServicePath> mergePaths(List<ServicePath> methodPaths, List<ServicePath> parentPaths) {
+
         if(methodPaths.isEmpty()) {
             return parentPaths;
         }
@@ -98,8 +99,15 @@ public class ServiceRequestProps {
         for (ServicePath methodPath : methodPaths) {
             String childPath = methodPath.getPath();
             if(!StringUtils.startsWith(childPath, "/")) childPath = "/" + childPath;
-            for (ServicePath parentPath : parentPaths) {
-                results.add(new ServicePath(parentPath.getPath() + childPath));
+
+            if(parentPaths.isEmpty()){
+                results.add(new ServicePath( childPath));
+            }else {
+                for (ServicePath parentPath : parentPaths) {
+
+                    // results.add(new ServicePath(parentPath.getPath() + childPath));
+                    results.add(new ServicePath(childPath));
+                }
             }
         }
         return results;

@@ -1,27 +1,24 @@
 package com.sdadas.spring2ts.test;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.sdadas.spring2ts.examples.utils.JsonUtils;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class ClientTester implements Closeable {
     private int scriptsCount = 0;
 
     public void open(File file) {
-        ChromeDriverManager.getInstance().setup();
+        WebDriverManager.chromedriver().getInstance().setup();
         WebDriverRunner.setWebDriver(new ChromeDriver());
         Selenide.open(file.toURI().toString());
     }
@@ -63,10 +60,12 @@ public class ClientTester implements Closeable {
     }
 
     public void waitForReady() {
-        WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 30, 500);
-        wait.until((WebDriver driver) -> {
-            return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
-        });
+        WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(),
+                Duration.of(30, ChronoUnit.SECONDS),
+                Duration.of(500, ChronoUnit.MILLIS));
+        wait.until((WebDriver driver) ->
+                ((JavascriptExecutor) driver).executeScript("return document.readyState")
+                        .equals("complete"));
     }
 
     public void sleep(long milis) {
@@ -75,6 +74,6 @@ public class ClientTester implements Closeable {
 
     @Override
     public void close() throws IOException {
-        Selenide.close();
+        Selenide.dismiss();
     }
 }

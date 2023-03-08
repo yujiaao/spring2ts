@@ -31,6 +31,8 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseMethodTemplate.logger;
+
 /**
  * @author Sławomir Dadas
  */
@@ -76,6 +78,10 @@ public abstract class TSOutputProcessor implements OutputProcessor, TypeMapper {
 
     private void writeFile(TSFile file) {
         File output = new File(outputDir, file.getPath());
+        if(output.exists()) {
+            logger.info("File exists: " + output.getAbsolutePath()+", and skipping, to regenerate, delete it first");
+        }
+
         PrintWriter writer = null;
         try{
             FileUtils.forceMkdir(output.getParentFile());

@@ -35,7 +35,7 @@ public class TSFile implements TSWritable {
 
     private List<TSImport> imports = new ArrayList<>();
 
-    private List<TSWritable> types = new ArrayList<>();
+    private final List<TSWritable> types = new ArrayList<>();
 
     private boolean optimizeImports = true;
 

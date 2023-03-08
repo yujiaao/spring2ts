@@ -14,4 +14,6 @@ public interface TSServiceTemplate {
     void init(TypeMapper mapper) throws IOException;
 
     TSWritable serviceClass(ServiceClass clazz);
+
+    TSWritable serviceNamespace(ServiceClass clazz);
 }

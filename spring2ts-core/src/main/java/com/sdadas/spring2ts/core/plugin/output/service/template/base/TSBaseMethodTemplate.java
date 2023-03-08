@@ -20,6 +20,7 @@ import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.types.VarType;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * TODO; write comments
@@ -31,6 +32,7 @@ import java.util.*;
  * @author Sławomir Dadas
  */
 public class TSBaseMethodTemplate {
+    public static  final Logger logger = Logger.getLogger(TSBaseMethodTemplate.class.getName());
 
     private ServiceMethod method;
 
@@ -68,7 +70,8 @@ public class TSBaseMethodTemplate {
         TSFunctionDef res = new TSFunctionDef();
         res.name(method.getName());
         res.returnType(createMethodReturnType());
-        res.modifier(TSModifier.PUBLIC);
+        res.modifier(TSModifier.ASYNC)
+                .modifier(TSModifier.FUNCTION);
         createMethodParams(res);
         createMethodBody(res);
         return res;
@@ -145,6 +148,10 @@ public class TSBaseMethodTemplate {
     }
 
     private String getPath() {
+        if(props.getPaths().isEmpty()) {
+            logger.warning("No path specified in method props:"+props);
+            return "";
+        }
         return props.getPaths().get(0).getSimplified();
     }
 

@@ -9,6 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
  * @author Sławomir Dadas
  */
 public final class AnnotationUtils {
+    public static final Logger logger = Logger.getLogger(AnnotationUtils.class.getName());
 
     @SafeVarargs
     public static boolean hasAny(AnnotationTarget<?> target, Class<? extends Annotation>... types) {
@@ -34,7 +36,10 @@ public final class AnnotationUtils {
     public static Multimap<String, String> getAnnotationAsMap(org.jboss.forge.roaster.model.Annotation<?> annotation,
                                                         Class<? extends Annotation> type) {
 
-        if(annotation == null) return null;
+        if(annotation == null) {
+         //   logger.warning("Annotation is null of type:"+type);
+            return null;
+        }
         List<Method> methods = getAnnotationAttributes(type);
         Multimap<String, String> result = HashMultimap.create();
         for (Method method : methods) {

@@ -1,17 +1,18 @@
 package com.sdadas.spring2ts.core.plugin.output.service.method;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.jboss.forge.roaster.model.source.ParameterSource;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
 import com.sdadas.spring2ts.core.utils.AnnotationUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,9 +37,17 @@ public class ServiceMethod {
         this.params = createParams(method);
     }
 
-    private ServiceRequestProps createProps(AnnotationTarget<?> type) {
-        Multimap<String, String> map = AnnotationUtils.getAnnotationAsMap(type, RequestMapping.class);
-        ServiceRequestProps props = new ServiceRequestProps(map);
+    static  void findAnnotationAsMap(Multimap<String,String> target, AnnotationTarget<?> type, Class ... annotations) {
+        Arrays.stream(annotations).forEach(annotation ->{
+            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
+            if(map1!=null) target.putAll(map1);
+        });
+    }
+    public static ServiceRequestProps createProps(AnnotationTarget<?> type) {
+        Multimap<String, String> mapAll = ArrayListMultimap.create();
+        findAnnotationAsMap(mapAll, type, RequestMapping.class, GetMapping.class, PostMapping.class);
+
+        ServiceRequestProps props = new ServiceRequestProps(mapAll);
         props.setResponseBody(AnnotationUtils.hasAny(type, ResponseBody.class, RestController.class));
         return props;
     }

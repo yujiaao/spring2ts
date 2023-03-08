@@ -1,6 +1,7 @@
 package com.sdadas.spring2ts.core.plugin.output.service;
 
 import com.sdadas.spring2ts.core.plugin.output.service.template.jquery.TSJQueryTemplate;
+import com.sdadas.spring2ts.core.plugin.output.service.template.react.TSReactTemplate;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
@@ -21,7 +22,7 @@ public class TSServiceOutput extends TSOutputProcessor {
 
     public TSServiceOutput(File outputDir) {
         super(outputDir);
-        template = new TSJQueryTemplate();
+        template = new TSReactTemplate();
         try {
             template.init(this);
         } catch (IOException e) {
@@ -31,6 +32,9 @@ public class TSServiceOutput extends TSOutputProcessor {
 
     @Override
     public TSWritable transform(JavaType<?> type) {
+        if(template instanceof TSReactTemplate) {
+            return createNameSpace(type);
+        }
         return createClass(type);
     }
 
@@ -39,9 +43,20 @@ public class TSServiceOutput extends TSOutputProcessor {
         return this.template.serviceClass(clazz);
     }
 
+    private TSWritable createNameSpace(JavaType<?> type) {
+        ServiceClass clazz = new ServiceClass(type);
+        return this.template.serviceNamespace(clazz);
+    }
+
     @Override
     public boolean filter(JavaType<?> type) {
-        return hasAnnotation(type, "SharedService")
+        if(template instanceof TSReactTemplate){
+            return hasAnnotation(type, "SharedService")
+                    && type.getName().contains("Controller")
+                    && (type instanceof JavaInterfaceSource || type instanceof JavaClassSource);
+        }
+
+        return hasAnnotation(type,"SharedService")
                 && (type instanceof JavaInterfaceSource || type instanceof JavaClassSource);
     }
 

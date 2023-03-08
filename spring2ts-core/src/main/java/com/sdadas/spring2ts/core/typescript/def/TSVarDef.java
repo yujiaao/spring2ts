@@ -88,6 +88,8 @@ public class TSVarDef implements TSWritable {
         if(!varType.equals(VarType.ARGUMENT)) writer.writeln();
         if(varType.equals(VarType.LOCAL)) {
             writer.write("let ");
+        }if(varType.equals(VarType.CONST)) {
+            writer.write("const ");
         } else {
             writer.write(TSModifier.getString(modifiers));
         }

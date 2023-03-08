@@ -1,5 +1,6 @@
 package com.sdadas.spring2ts.core.plugin.output.service.template.angular2;
 
+import com.sdadas.spring2ts.core.plugin.output.service.ServiceClass;
 import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseTemplate;
 import com.sdadas.spring2ts.core.typescript.def.TSClassDef;
@@ -7,6 +8,7 @@ import com.sdadas.spring2ts.core.typescript.def.TSFunctionDef;
 import com.sdadas.spring2ts.core.typescript.def.TSModifier;
 import com.sdadas.spring2ts.core.typescript.def.TSVarDef;
 import com.sdadas.spring2ts.core.typescript.types.CustomType;
+import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 
 import java.io.IOException;
 
@@ -47,4 +49,5 @@ public class TSAngular2Template extends TSBaseTemplate {
         typeMapper.imports("Http", "angular2/http");
         typeMapper.imports("BaseRequestOptions", "angular2/http");
     }
+
 }

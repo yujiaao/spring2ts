@@ -116,6 +116,10 @@ public abstract class TSTypeDef<T extends TSTypeDef> implements TSWritable {
         if(!functions.isEmpty()) writer.writeln();
         for (TSFunctionDef function : functions) {
             function.write(writer);
+            if(this instanceof TSNameSpaceDef){
+                // as object's member function
+                writer.write(",");
+            }
             writer.write("\n");
         }
     }

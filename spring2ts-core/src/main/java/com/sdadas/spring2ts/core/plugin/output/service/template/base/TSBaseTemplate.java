@@ -1,5 +1,7 @@
 package com.sdadas.spring2ts.core.plugin.output.service.template.base;
 
+import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceRequestProps;
+import com.sdadas.spring2ts.core.typescript.types.VarType;
 import org.apache.commons.io.IOUtils;
 import org.jboss.forge.roaster.model.JavaType;
 import org.springframework.core.io.ClassPathResource;
@@ -10,6 +12,7 @@ import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.template.TSServiceTemplate;
 import com.sdadas.spring2ts.core.typescript.def.*;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
+import com.sdadas.spring2ts.core.typescript.types.BasicType;
 
 import java.io.IOException;
 
@@ -18,6 +21,8 @@ import java.io.IOException;
  */
 public abstract class TSBaseTemplate implements TSServiceTemplate {
 
+    public static final String CONTROLLER_PREFIX = "cp";
+    public static final String SERVICE_PREFIX = "prefix";
     protected TypeMapper typeMapper;
 
     @Override
@@ -69,6 +74,14 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         return res;
     }
 
+    private TSNameSpaceDef createNameSpace(ServiceClass clazz) {
+        JavaType<?> type = clazz.getType();
+        TSNameSpaceDef res = new TSNameSpaceDef();
+        res.name(type.getName());
+        res.modifier(TSModifier.EXPORT);
+        return res;
+    }
+
     protected void createImports() {
         typeMapper.imports("Observable", "rxjs/Observable");
         typeMapper.imports(new TSImport("rxjs/Rx"));
@@ -76,4 +89,28 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         typeMapper.imports("HttpMethods", "./RequestBuilder");
         typeMapper.imports("ContentTypes", "./RequestBuilder");
     }
+
+    protected void afterCreateNameSpace(TSNameSpaceDef clazz) {
+    }
+    @Override
+    public TSWritable serviceNamespace(ServiceClass clazz) {
+
+        TSNameSpaceDef res = createNameSpace(clazz);
+        ServiceRequestProps props = ServiceMethod.createProps(clazz.getType());
+
+        res.globalVariable(new TSVarDef(CONTROLLER_PREFIX, BasicType.STRING,
+                " "+SERVICE_PREFIX+" + '"+(props.getPaths().isEmpty()?"":props.getPaths().get(0).getPath())+"'")
+                .varType(VarType.CONST));
+
+        afterCreateNameSpace(res);
+        for (ServiceMethod method : clazz.getMethods()) {
+            TSFunctionDef func = createMethod(method);
+            afterCreateMethod(func);
+            res.function(func);
+        }
+        createImports();
+        return res;
+
+    }
+
 }

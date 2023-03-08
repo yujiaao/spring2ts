@@ -32,7 +32,7 @@ public class ServiceParamProps implements Serializable {
 
     private String get(Multimap<String, String> map, String key) {
         Collection<String> values = map.get(key);
-        if(values.isEmpty()) return null;
+        if(values==null || values.isEmpty()) return null;
         return values.iterator().next();
     }
 

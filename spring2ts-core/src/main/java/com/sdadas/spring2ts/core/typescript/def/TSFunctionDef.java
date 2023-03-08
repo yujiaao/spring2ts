@@ -108,8 +108,8 @@ public class TSFunctionDef implements TSWritable {
         return StringUtils.equals(name, "constructor");
     }
 
-    @Override
-    public void write(CodeWriter writer) throws IOException {
+    //@Override
+    public void writeOld(CodeWriter writer) throws IOException {
         writer.writeln();
         writer.write(TSModifier.getString(modifiers));
         writer.write(name);
@@ -123,6 +123,31 @@ public class TSFunctionDef implements TSWritable {
         }
         writeBody(writer);
     }
+
+
+    /**
+     * as object member function
+     * @param writer
+     * @throws IOException
+     */
+    @Override
+    public void write(CodeWriter writer) throws IOException {
+        writer.writeln();
+        writer.write(name);
+        writer.write(": ");
+        writer.write(TSModifier.getString(modifiers));
+        writeGenerics(writer);
+        writer.write("(");
+        writeArguments(writer);
+        writer.write(")");
+        if(!isConstructor()) {
+            TypeName ret = returnType != null ? returnType : BasicType.ANY;
+            writer.write(": ").write(ret.toDeclaration());
+        }
+        writeBody(writer);
+    }
+
+
 
     @Override
     public String getName() {

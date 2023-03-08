@@ -26,11 +26,11 @@ import static com.google.common.collect.ImmutableSet.of;
  */
 public class TSRequestBuilder implements TSWritable {
 
-    private String path;
+    protected String path;
 
-    private RequestMethod method;
+    protected RequestMethod method;
 
-    private Map<String, Param> params = Maps.newLinkedHashMap();
+    protected Map<String, Param> params = Maps.newLinkedHashMap();
 
     public TSRequestBuilder() {
     }
@@ -87,7 +87,7 @@ public class TSRequestBuilder implements TSWritable {
         cw.closeIndent();
     }
 
-    private Optional<Param> getHttpMethodParam() {
+    protected Optional<Param> getHttpMethodParam() {
         return params.values().stream().filter(p -> p.is(ParamType.Method)).findAny();
     }
 
@@ -180,15 +180,15 @@ public class TSRequestBuilder implements TSWritable {
         return res.toArray(new String[res.size()]);
     }
 
-    private class Param {
+    protected class Param {
 
-        private String name;
+        public String name;
 
-        private String value;
+        public String value;
 
-        private ParamType type;
+        public ParamType type;
 
-        private String pathVar;
+        public String pathVar;
 
         public Param(String name, String value, ParamType type) {
             this.name = name;
@@ -209,7 +209,7 @@ public class TSRequestBuilder implements TSWritable {
         }
     }
 
-    private enum ParamType {
+    protected enum ParamType {
         Model(of(ServiceParamType.MODEL_ATTRIBUTE), null),
         Body(of(ServiceParamType.HTTP_ENTITY, ServiceParamType.REQUEST_BODY, ServiceParamType.REQUEST_PART), null),
         Query(of(ServiceParamType.REQUEST_PARAM), null),

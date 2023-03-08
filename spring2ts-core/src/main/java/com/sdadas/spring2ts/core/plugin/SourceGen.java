@@ -42,7 +42,7 @@ public class SourceGen {
         }
 
         if(outputDir.exists()) {
-            FileUtils.forceDelete(outputDir);
+        //    FileUtils.forceDelete(outputDir);
         }
         FileUtils.forceMkdir(outputDir);
     }
