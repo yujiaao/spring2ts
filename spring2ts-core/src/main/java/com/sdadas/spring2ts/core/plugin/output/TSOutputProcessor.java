@@ -80,6 +80,7 @@ public abstract class TSOutputProcessor implements OutputProcessor, TypeMapper {
         File output = new File(outputDir, file.getPath());
         if(output.exists()) {
             logger.info("File exists: " + output.getAbsolutePath()+", and skipping, to regenerate, delete it first");
+            return;
         }
 
         PrintWriter writer = null;
