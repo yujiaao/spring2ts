@@ -50,12 +50,6 @@ public class TSServiceOutput extends TSOutputProcessor {
 
     @Override
     public boolean filter(JavaType<?> type) {
-        if(template instanceof TSReactTemplate){
-            return hasAnnotation(type, "SharedService")
-                    && type.getName().contains("Controller")
-                    && (type instanceof JavaInterfaceSource || type instanceof JavaClassSource);
-        }
-
         return hasAnnotation(type,"SharedService")
                 && (type instanceof JavaInterfaceSource || type instanceof JavaClassSource);
     }

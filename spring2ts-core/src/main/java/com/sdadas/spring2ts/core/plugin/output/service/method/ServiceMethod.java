@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.MethodSource;
@@ -55,7 +56,8 @@ public class ServiceMethod {
     private List<ServiceParam> createParams(MethodSource<?> method) {
         List<? extends ParameterSource<?>> parameters = method.getParameters();
         List<ServiceParam> results = Lists.newArrayList();
-        parameters.forEach(p -> results.add(new ServiceParam(p)));
+        parameters.stream().filter(parameter -> ServiceParamType.resolve(parameter) != ServiceParamType.IGNORED)
+                .forEach(p -> results.add(new ServiceParam(p)));
         return results;
     }
     public String getName() {

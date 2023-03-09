@@ -13,7 +13,7 @@ public class TSReactTemplate extends TSBaseTemplate {
 
     @Override
     protected void onInit() throws IOException {
-        loadOutputFile(typeMapper, "plugin/output/service/react/RequestBuilder.ts");
+        // loadOutputFile(typeMapper, "plugin/output/service/react/RequestBuilder.ts");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class TSReactTemplate extends TSBaseTemplate {
         typeMapper.imports("get", request);
         typeMapper.imports("postJson", request);
 
-        String constant="./constant";
+        String constant="../constant";
         //import { post, get, postJson } from '@/utils/request';
         typeMapper.imports(SERVICE_PREFIX , constant);
 

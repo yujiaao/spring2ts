@@ -16,7 +16,13 @@ public class SourceGenTest {
         SourceGen sg = new SourceGen(
                 new File(BASE_PATH + "manager/src/main/java/"),
                 //new File(BASE_PATH + "typescript/"));
-                new File("/Users/xwx/projects/cjh-manager-fe-react/src/services/content/SourceGen"));
+                new File("/Users/xwx/projects/cjh-manager-fe-react/src/services/content"));
         sg.run();
+
+        SourceGen sg1 = new SourceGen(
+                new File(BASE_PATH + "dto/src/main/java/"),
+                //new File(BASE_PATH + "typescript/"));
+                new File("/Users/xwx/projects/cjh-manager-fe-react/src/services/content"));
+        sg1.run();
     }
 }

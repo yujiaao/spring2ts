@@ -69,6 +69,11 @@ public enum ServiceParamType {
 
     @SuppressWarnings("unchecked")
     public ServiceParamProps createProps(ParameterSource<?> param) {
+        if(type == null) {
+            logger.warning("ServiceParam::createProps- " + param.toString() );
+            return null;
+        }
+
         if(Annotation.class.isAssignableFrom(type)) {
             Class<? extends Annotation> annotation = (Class<? extends Annotation>) this.type;
             Multimap<String, String> map = AnnotationUtils.getAnnotationAsMap(param, annotation);
@@ -118,6 +123,7 @@ public enum ServiceParamType {
         set.add("org.springframework.validation.Errors", "org.springframework.validation.BindingResult");
         set.add("org.springframework.web.bind.support.SessionStatus");
         set.add("org.springframework.web.util.UriComponentsBuilder");
+        set.add("jakarta.servlet.http.HttpServletRequest");
         return set.build();
     }
 }
