@@ -39,16 +39,35 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
     public void write(CodeWriter cw) throws IOException {
         cw.openIndent();
         cw.writeln("const url = "+CONTROLLER_PREFIX+" + '"+path+"';");
-        cw.writeln("return ");
-        writeMethod(cw);
-        String results = params.values().stream()
-                .filter(p-> p.is(TSRequestBuilder.ParamType.Query))
-                .map(param -> param.value).collect(Collectors.joining(","));
 
-        if(StringUtils.isEmpty(results)){
+        String query = params.values().stream()
+                .filter(p-> p.is(ParamType.Query)|| p.is(ParamType.Model))
+                .map(param -> param.is(ParamType.Query) ? param.value : "..."+ param.value).collect(Collectors.joining(","));
+
+        String queryUri = "const query='?'+"+params.values().stream()
+                .filter(p-> p.is(ParamType.Query) )
+                .map(param -> "'"+param.value+"='+encodeURIComponent("+ param.value+")" ).collect(Collectors.joining("+'&'+"));
+
+        String body = params.values().stream()
+                .filter(p-> p.is(ParamType.Body))
+                .map(param -> "..."+param.value).collect(Collectors.joining(","));
+
+        if(!StringUtils.isEmpty(query) && !StringUtils.isEmpty(body)){
+            cw.writeln(queryUri);
+        }
+        cw.writeln("return ");
+
+        writeMethod(cw);
+
+        if(StringUtils.isEmpty(query+body)){
             cw.write("url);");
-        }else{
-            cw.write("url, {").write(results).write("});");
+        }else if(StringUtils.isEmpty(body)){
+            cw.write("url, {").write(query).write("});");
+        }else if(StringUtils.isEmpty(query)){
+            cw.write("url, {").write(body).write("});");
+        }else {
+            // query + body
+            cw.write("url + query, {").write(body).write("});");
         }
 
 
@@ -69,7 +88,7 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
 
         //writeBody(cw);
         //writeContentType(cw);
-        //writeBuild(cw);
+
         cw.closeIndent();
     }
 
@@ -101,13 +120,15 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
     private void writeMethod(CodeWriter cw) throws IOException {
         Optional<TSRequestBuilder.Param> param = getHttpMethodParam();
         String methodName;
-        if(param.isPresent()) {
-            methodName = param.get().name.toLowerCase();
+        if(param.isPresent()  && !this.method.name().equals("POST")) {
+            methodName = this.method.name().toLowerCase();
         } else {
             methodName = this.method.name();
 
-            if(methodName.equals(HttpMethod.POST)
+            if(methodName.equals(HttpMethod.POST.name())
                     && params.values().stream().filter(v -> v.type== ParamType.Body).findAny().isPresent()) {
+                //todo ServiceParamType.HTTP_ENTITY || ServiceParamType.REQUEST_PART => postFile
+                // ServiceParamType.REQUEST_BODY ==> postJson
                 methodName = "postJson";
             }else {
                 methodName = methodName.toLowerCase();
@@ -116,14 +137,7 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
         cw.write(methodName).write("(");
     }
 
-    protected void writeBuild(CodeWriter cw) throws IOException {
-        cw.writeln(".build()");
-        cw.writeln(".observe();");
-    }
 
-    private void writeContentType(CodeWriter cw) throws IOException {
-        cw.writeln(".contentType(ContentTypes.Json)");
-    }
 
     private void writeBody(CodeWriter cw) throws IOException {
         if(countBodyParts() > 1) {

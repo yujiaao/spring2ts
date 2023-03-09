@@ -4,6 +4,10 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.forge.roaster.model.AnnotationTarget;
+import org.jboss.forge.roaster.model.impl.AnnotationImpl;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -42,6 +46,13 @@ public final class AnnotationUtils {
         }
         List<Method> methods = getAnnotationAttributes(type);
         Multimap<String, String> result = HashMultimap.create();
+        String typeName = annotation.getName();
+        if(PostMapping.class.getName().contains(typeName) || GetMapping.class.getName().contains(typeName)) {
+            result.removeAll("method");
+            result.put("method", PostMapping.class.getName().contains(typeName)  ? RequestMethod.POST.name()
+                    :  RequestMethod.GET.name());
+        }
+
         for (Method method : methods) {
             String name = method.getName();
             boolean array = method.getReturnType().isArray();
@@ -70,7 +81,9 @@ public final class AnnotationUtils {
     }
 
     private static boolean isAttributeMethod(Method method) {
-        return (method != null && method.getParameterTypes().length == 0 && method.getReturnType() != void.class);
+        return (method != null && method.getParameterTypes().length == 0 &&
+                 method.getReturnType() != void.class
+        );
     }
 
     private AnnotationUtils() {
