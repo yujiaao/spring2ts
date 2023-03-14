@@ -18,6 +18,7 @@ public class ServiceParamProps implements Serializable {
     private String pathVar;
 
     private String defaultValue;
+    private String description;
 
     public ServiceParamProps() {
     }
@@ -28,6 +29,15 @@ public class ServiceParamProps implements Serializable {
         this.required = getBooleanValue(get(map, "required"));
         this.pathVar = StringUtils.stripToNull(get(map, "pathVar"));
         this.defaultValue = StringUtils.stripToNull(get(map, "defaultValue"));
+        this.description = StringUtils.stripToNull(get(map, "description"));
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     private String get(Multimap<String, String> map, String key) {

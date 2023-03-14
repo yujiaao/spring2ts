@@ -69,6 +69,9 @@ public class TSBaseMethodTemplate {
     public TSFunctionDef createFunction() {
         TSFunctionDef res = new TSFunctionDef();
         res.name(method.getName());
+
+        //res.comment(method.getProps().);
+
         res.returnType(createMethodReturnType());
         res.modifier(TSModifier.ASYNC)
                 .modifier(TSModifier.FUNCTION);
@@ -123,7 +126,8 @@ public class TSBaseMethodTemplate {
     }
 
     public TSVarDef getArgument(ServiceParam param) {
-        return new TSVarDef(param.getName(), createParamType(param)).varType(VarType.ARGUMENT);
+        return new TSVarDef(param.getName(), createParamType(param)).varType(VarType.ARGUMENT)
+                .description(param.getProps().getDescription());
     }
 
     protected TSRequestBuilder createRequestBuilder() {

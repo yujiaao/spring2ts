@@ -3,15 +3,17 @@ package com.sdadas.spring2ts.core.plugin.output.service.method;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
+import com.sdadas.spring2ts.core.utils.AnnotationUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.jboss.forge.roaster.model.source.ParameterSource;
 import org.springframework.web.bind.annotation.*;
-import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
-import com.sdadas.spring2ts.core.utils.AnnotationUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +48,19 @@ public class ServiceMethod {
     }
     public static ServiceRequestProps createProps(AnnotationTarget<?> type) {
         Multimap<String, String> mapAll = ArrayListMultimap.create();
-        findAnnotationAsMap(mapAll, type, RequestMapping.class, GetMapping.class, PostMapping.class);
+        findAnnotationAsMap(mapAll, type,
+                RequestMapping.class, GetMapping.class, PostMapping.class);
+
+        Arrays.stream(new Class[] {ApiOperation.class, Api.class}).forEach(annotation ->{
+            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
+            if(map1!=null) mapAll.putAll("comment",map1.values());
+        });
+
+        Arrays.stream(new Class[] {ApiParam.class}).forEach(annotation ->{
+            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
+            if(map1!=null) mapAll.putAll("description",map1.values());
+        });
+
 
         ServiceRequestProps props = new ServiceRequestProps(mapAll);
         props.setResponseBody(AnnotationUtils.hasAny(type, ResponseBody.class, RestController.class));

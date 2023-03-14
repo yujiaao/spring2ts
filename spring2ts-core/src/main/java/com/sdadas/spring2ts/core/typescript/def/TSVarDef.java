@@ -25,6 +25,8 @@ public class TSVarDef implements TSWritable {
 
     private boolean optional;
 
+    private String description;
+
     private VarType varType = VarType.INSTANCE;
 
     public TSVarDef() {
@@ -50,6 +52,11 @@ public class TSVarDef implements TSWritable {
 
     public TSVarDef name(String value) {
         this.name = value;
+        return this;
+    }
+
+    public TSVarDef description(String value) {
+        this.description = value;
         return this;
     }
 

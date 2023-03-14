@@ -30,6 +30,8 @@ public class TSFunctionDef implements TSWritable {
 
     private TSWritable body;
 
+    private String comment;
+
     private EnumSet<TSModifier> modifiers = EnumSet.noneOf(TSModifier.class);
 
     public TSFunctionDef() {
@@ -42,6 +44,11 @@ public class TSFunctionDef implements TSWritable {
 
     public TSFunctionDef name(String value) {
         this.name = value;
+        return this;
+    }
+
+    public TSFunctionDef comment(String value) {
+        this.comment = value;
         return this;
     }
 

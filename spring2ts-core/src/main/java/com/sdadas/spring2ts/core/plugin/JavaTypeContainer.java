@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.sdadas.spring2ts.core.utils.AnnotationUtils.logger;
+
 /**
  * @author Sławomir Dadas
  */
@@ -86,7 +88,10 @@ public class JavaTypeContainer {
 
         String name = type.getName();
         if(javaTypes.containsKey(name)) {
-            throw new IllegalStateException("Two java javaTypes defined with the same name: " + name);
+            // there is a bug, need compare with full java type name!
+            // throw new IllegalStateException("Two java javaTypes defined with the same name: " + name);
+            logger.warning("Two java javaTypes defined with the same name: " + name+" => "+type.getQualifiedName() );
+            return;
         }
         javaTypes.put(name, type);
     }
