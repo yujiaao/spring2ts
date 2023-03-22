@@ -30,4 +30,12 @@ public class HelloController {
                                      List<HelloDto> his) {
         return new HelloResponse(id.incrementAndGet(), "Hello " + his.size());
     }
+
+    @PostMapping("/hello-json")
+    public HelloResponse helloJson2(  @Validated
+                                     @ApiParam(value = "InfoCarRelations 数据对象", required = true)
+                                     @RequestBody
+                                     HelloDto his) {
+        return new HelloResponse(id.incrementAndGet(), "Hello " + his.toString());
+    }
 }
