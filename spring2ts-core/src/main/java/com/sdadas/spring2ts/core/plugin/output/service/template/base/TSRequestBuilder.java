@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.forge.roaster.model.JavaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
@@ -49,13 +50,13 @@ public class TSRequestBuilder implements TSWritable {
         if(type.isPrimitive()) {
             name = MoreObjects.firstNonNull(param.getProps().getName(), var.getName());
         }
-        Param res = new Param(name, var.getName(), ParamType.getFromParam(param.getParamType()));
+        Param res = new Param(name, var.getName(), ParamType.getFromParam(param.getParamType()), var.getType());
         res.pathVar = param.getProps().getPathVar();
         add(res);
     }
 
     public void add(TSVarDef var, TSBaseMethodTemplate.AdditionalOption option) {
-        add(new Param(null, var.getName(), ParamType.getFromOption(option)));
+        add(new Param(null, var.getName(), ParamType.getFromOption(option), var.getType()));
     }
 
     private void add(Param param) {
@@ -190,10 +191,13 @@ public class TSRequestBuilder implements TSWritable {
 
         public String pathVar;
 
-        public Param(String name, String value, ParamType type) {
+        public TypeName javaType;
+
+        public Param(String name, String value, ParamType type, TypeName javaType) {
             this.name = name;
             this.value = value;
             this.type = type;
+            this.javaType = javaType;
         }
 
         public boolean hasName() {
@@ -206,6 +210,10 @@ public class TSRequestBuilder implements TSWritable {
 
         public boolean is(ParamType val) {
             return val.equals(this.type);
+        }
+
+        public boolean isArrayType() {
+            return javaType.getArrayDimensions()>0 || javaType.getBaseName().equals("List") || javaType.getBaseName().equals("Set");
         }
     }
 

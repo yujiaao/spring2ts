@@ -59,15 +59,25 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
 
         writeMethod(cw);
 
+        boolean bodyIsArray = params.values().stream().anyMatch(p-> p.is(ParamType.Body) && p.isArrayType());
+
         if(StringUtils.isEmpty(query+body)){
             cw.write("url);");
         }else if(StringUtils.isEmpty(body)){
             cw.write("url, {").write(query).write("});");
         }else if(StringUtils.isEmpty(query)){
-            cw.write("url, {").write(body).write("});");
+            if(bodyIsArray) {
+                cw.write("url, [").write(body).write("]);");
+            }  else {
+                cw.write("url, {").write(body).write("});");
+            }
         }else {
             // query + body
-            cw.write("url + query, {").write(body).write("});");
+            if(bodyIsArray) {
+                cw.write("url + query, [").write(body).write("]);");
+            }else {
+                cw.write("url + query, {").write(body).write("});");
+            }
         }
 
 
