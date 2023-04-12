@@ -18,6 +18,11 @@ public class HelloController {
 
     private final AtomicInteger id = new AtomicInteger();
 
+    /**
+     * Construct a new HelloController
+     * @param name The name of the controller
+     * @return  The created controller
+     */
     @RequestMapping("/hello")
     public HelloResponse hello(@RequestParam(value = "name", defaultValue = "world") String name) {
         return new HelloResponse(id.incrementAndGet(), "Hello " + name);

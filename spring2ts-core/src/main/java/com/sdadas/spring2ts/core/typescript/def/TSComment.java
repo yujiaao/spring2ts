@@ -19,6 +19,7 @@ import com.sdadas.spring2ts.core.typescript.writer.CodeWriter;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 /**
  * @author Sławomir Dadas
@@ -60,6 +61,8 @@ public class TSComment implements TSWritable {
         if(!inline) writer.write(" */");
         writer.writeln();
     }
+
+
 
     @Override
     public String getName() {

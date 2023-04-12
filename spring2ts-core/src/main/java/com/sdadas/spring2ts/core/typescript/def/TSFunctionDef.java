@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Sławomir Dadas
@@ -139,6 +140,8 @@ public class TSFunctionDef implements TSWritable {
      */
     @Override
     public void write(CodeWriter writer) throws IOException {
+        writeComment(writer, comment);
+
         writer.writeln();
         writer.write(name);
         writer.write(": ");
@@ -152,6 +155,23 @@ public class TSFunctionDef implements TSWritable {
             writer.write(": ").write(ret.toDeclaration());
         }
         writeBody(writer);
+    }
+
+    public void writeComment(CodeWriter writer, String comment) throws IOException {
+
+        writer.writeln("/** ");
+        if(comment!=null) {
+            Stream.of(comment.split("\n"))
+                    .forEach(s -> {
+                        try {
+                            writer.writeln("* "+s);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+        writeArgumentsComment(writer);
+        writer.writeln("*/");
     }
 
 
@@ -179,6 +199,16 @@ public class TSFunctionDef implements TSWritable {
         }
     }
 
+    private void writeArgumentsComment(CodeWriter writer) throws IOException {
+        if(args.isEmpty()) return;
+        for (int i = 0; i < args.size(); i++) {
+            TSVarDef arg = args.get(i);
+            arg.varType(VarType.ARGUMENT);
+            if(arg.getDescription()!=null) {
+                writer.writeln("* @param " + arg.getName() + " " + arg.getDescription());
+            }
+        }
+    }
     private void writeBody(CodeWriter writer) throws IOException {
         if(body == null) {
             writer.write(";");

@@ -1,8 +1,10 @@
 package com.sdadas.spring2ts.core.plugin.output.service.template.base;
 
+import com.sdadas.spring2ts.core.plugin.output.service.CommentAnnotationUtils;
 import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceRequestProps;
 import com.sdadas.spring2ts.core.typescript.types.VarType;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.forge.roaster.model.JavaType;
 import org.springframework.core.io.ClassPathResource;
 import com.sdadas.spring2ts.core.plugin.output.OutputProcessor;
@@ -79,6 +81,10 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         TSNameSpaceDef res = new TSNameSpaceDef();
         res.name(type.getName());
         res.modifier(TSModifier.EXPORT);
+
+       String comment = CommentAnnotationUtils.extractedComment(type);
+
+        res.comment(comment);
         return res;
     }
 

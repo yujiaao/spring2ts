@@ -70,7 +70,13 @@ public class TSBaseMethodTemplate {
         TSFunctionDef res = new TSFunctionDef();
         res.name(method.getName());
 
-        //res.comment(method.getProps().);
+        String comment = method.getProps().getComment();
+        if (!StringUtils.isBlank(comment) && !StringUtils.isBlank(method.getProps().getDescription())) comment += "\n";
+        comment += method.getProps().getDescription();
+        if(method.getMethod().hasJavaDoc() ){
+            comment = method.getMethod().getJavaDoc().getFullText()+"\n" + comment;
+        }
+        res.comment(comment);
 
         res.returnType(createMethodReturnType());
         res.modifier(TSModifier.ASYNC)

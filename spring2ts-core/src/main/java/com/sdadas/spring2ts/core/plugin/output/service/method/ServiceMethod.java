@@ -6,9 +6,6 @@ import com.google.common.collect.Multimap;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
 import com.sdadas.spring2ts.core.utils.AnnotationUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.MethodSource;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.sdadas.spring2ts.core.plugin.output.service.CommentAnnotationUtils.extractedComment;
 
 /**
  * @author Sławomir Dadas
@@ -51,21 +50,13 @@ public class ServiceMethod {
         findAnnotationAsMap(mapAll, type,
                 RequestMapping.class, GetMapping.class, PostMapping.class);
 
-        Arrays.stream(new Class[] {ApiOperation.class, Api.class}).forEach(annotation ->{
-            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
-            if(map1!=null) mapAll.putAll("comment",map1.values());
-        });
-
-        Arrays.stream(new Class[] {ApiParam.class}).forEach(annotation ->{
-            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
-            if(map1!=null) mapAll.putAll("description",map1.values());
-        });
-
+        extractedComment(type, mapAll);
 
         ServiceRequestProps props = new ServiceRequestProps(mapAll);
         props.setResponseBody(AnnotationUtils.hasAny(type, ResponseBody.class, RestController.class));
         return props;
     }
+
 
     private List<ServiceParam> createParams(MethodSource<?> method) {
         List<? extends ParameterSource<?>> parameters = method.getParameters();

@@ -118,4 +118,8 @@ public class TSVarDef implements TSWritable {
     public TypeName getType() {
         return type;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

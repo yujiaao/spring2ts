@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.util.EnumSet;
 import java.util.Set;
 
+import static com.sdadas.spring2ts.core.plugin.output.service.CommentAnnotationUtils.extractedComment;
 import static com.sdadas.spring2ts.core.utils.AnnotationUtils.logger;
 
 /**
@@ -77,10 +78,12 @@ public enum ServiceParamType {
         if(Annotation.class.isAssignableFrom(type)) {
             Class<? extends Annotation> annotation = (Class<? extends Annotation>) this.type;
             Multimap<String, String> map = AnnotationUtils.getAnnotationAsMap(param, annotation);
-            assert map==null || map.size()>0: "Invalid annotation";
+
+            extractedComment(param, map);
+
 
             if(map==null || map.size()==0){
-                logger.warning("Invalid annotation:"+param);
+                logger.finest("No fund any attributes for param : "+param+" of annotation : "+annotation);
                 return new ServiceParamProps();
             }
 
@@ -124,6 +127,7 @@ public enum ServiceParamType {
         set.add("org.springframework.web.bind.support.SessionStatus");
         set.add("org.springframework.web.util.UriComponentsBuilder");
         set.add("jakarta.servlet.http.HttpServletRequest");
+        set.add("javax.servlet.http.HttpServletRequest");
         return set.build();
     }
 }

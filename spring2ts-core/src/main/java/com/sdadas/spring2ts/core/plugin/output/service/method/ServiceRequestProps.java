@@ -40,6 +40,9 @@ public class ServiceRequestProps {
 
     private boolean responseBody = false;
 
+    private String comment = "";
+    private String description="";
+
     public ServiceRequestProps(ServiceRequestProps other) {
         this.paths = other.paths;
         this.methods = other.methods;
@@ -55,6 +58,9 @@ public class ServiceRequestProps {
         if(methods.isEmpty()) methods = EnumSet.allOf(RequestMethod.class);
         consumes = Sets.newLinkedHashSet(get(map, "consumes"));
         produces = Sets.newLinkedHashSet(get(map, "produces"));
+
+        comment = String.join(",", map.get("comment"));
+        description = String.join(",", map.get("description"));
     }
 
     private List<ServicePath> createPaths(Multimap<String, String> map) {
@@ -175,5 +181,13 @@ public class ServiceRequestProps {
 
     public boolean supportsManyConsumes() {
         return consumes.size() > 1;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
