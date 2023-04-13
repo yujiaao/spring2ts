@@ -24,6 +24,11 @@ public class TSNameSpaceDef extends TSTypeDef<TSNameSpaceDef> {
         writeGlobalVariables(writer);
         writer.writeln();
 
+        if(comment != null) {
+            writeComment(writer, comment);
+            writer.writeln();
+        }
+
         writer.write("export const ");
         writer.write(name.toDeclaration());
         writer.write(" = ");

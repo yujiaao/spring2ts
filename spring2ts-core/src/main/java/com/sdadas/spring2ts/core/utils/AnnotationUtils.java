@@ -38,13 +38,13 @@ public final class AnnotationUtils {
 
     public static Multimap<String, String> getAnnotationAsMap(org.jboss.forge.roaster.model.Annotation<?> annotation,
                                                         Class<? extends Annotation> type) {
+        Multimap<String, String> result = HashMultimap.create();
 
         if(annotation == null) {
          //   logger.warning("Annotation is null of type:"+type);
-            return null;
+            return result;
         }
         List<Method> methods = getAnnotationAttributes(type);
-        Multimap<String, String> result = HashMultimap.create();
         String typeName = annotation.getName();
         if(PostMapping.class.getName().contains(typeName) || GetMapping.class.getName().contains(typeName)) {
             result.removeAll("method");
@@ -67,7 +67,7 @@ public final class AnnotationUtils {
 
     private static boolean allElementsNull(Object [] values) {
         for (Object value : values) {
-            if(value != null) return false;
+            if(value != null && !value.equals("")) return false;
         }
         return true;
     }

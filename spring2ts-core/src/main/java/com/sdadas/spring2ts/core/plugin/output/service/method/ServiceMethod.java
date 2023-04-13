@@ -42,7 +42,7 @@ public class ServiceMethod {
     static  void findAnnotationAsMap(Multimap<String,String> target, AnnotationTarget<?> type, Class ... annotations) {
         Arrays.stream(annotations).forEach(annotation ->{
             Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
-            if(map1!=null) target.putAll(map1);
+            target.putAll(map1);
         });
     }
     public static ServiceRequestProps createProps(AnnotationTarget<?> type) {
