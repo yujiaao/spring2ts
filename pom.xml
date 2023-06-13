@@ -7,7 +7,7 @@
     <groupId>com.sdadas.spring2ts</groupId>
     <artifactId>spring2ts</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.5</version>
+    <version>1.1.8</version>
 
     <modules>
         <module>spring2ts-core</module>

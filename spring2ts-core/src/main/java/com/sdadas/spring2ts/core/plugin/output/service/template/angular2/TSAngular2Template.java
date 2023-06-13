@@ -11,6 +11,7 @@ import com.sdadas.spring2ts.core.typescript.types.CustomType;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author Sławomir Dadas
@@ -43,8 +44,8 @@ public class TSAngular2Template extends TSBaseTemplate {
     }
 
     @Override
-    protected void createImports() {
-        super.createImports();
+    protected void createImports(Set<String> importUsed) {
+        super.createImports( importUsed);
         typeMapper.imports("Injectable", "angular2/core");
         typeMapper.imports("Http", "angular2/http");
         typeMapper.imports("BaseRequestOptions", "angular2/http");

@@ -49,6 +49,8 @@ public class ServiceRequestProps {
         this.consumes = other.consumes;
         this.produces = other.produces;
         this.responseBody = other.responseBody;
+        this.comment = other.comment;
+        this.description = other.description;
     }
 
     public ServiceRequestProps(Multimap<String, String> map) {

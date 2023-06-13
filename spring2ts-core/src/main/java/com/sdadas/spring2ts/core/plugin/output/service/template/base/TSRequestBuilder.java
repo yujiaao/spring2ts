@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.forge.roaster.model.JavaType;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
 import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
@@ -26,6 +27,12 @@ import static com.google.common.collect.ImmutableSet.of;
  * @author Sławomir Dadas
  */
 public class TSRequestBuilder implements TSWritable {
+
+    public static final String POST ="post";
+    public static final String POST_JSON ="postJson";
+    public static final String GET ="get";
+
+    public static final Set<String> METHODS = of(POST, POST_JSON, GET);
 
     protected String path;
 
@@ -134,6 +141,26 @@ public class TSRequestBuilder implements TSWritable {
 
     private void writeContentType(CodeWriter cw) throws IOException {
         cw.writeln(".contentType(ContentTypes.Json)");
+    }
+
+    public String getMethodName() {
+        Optional<Param> param = getHttpMethodParam();
+        String methodName;
+        if(param.isPresent()  && !this.method.name().equals("POST")) {
+            methodName = this.method.name().toLowerCase();
+        } else {
+            methodName = this.method.name();
+
+            if(methodName.equals(HttpMethod.POST.name())
+                    && params.values().stream().filter(v -> v.type== ParamType.Body).findAny().isPresent()) {
+                //todo ServiceParamType.HTTP_ENTITY || ServiceParamType.REQUEST_PART => postFile
+                // ServiceParamType.REQUEST_BODY ==> postJson
+                methodName = POST_JSON;
+            }else {
+                methodName = methodName.toLowerCase();
+            }
+        }
+        return methodName;
     }
 
     private void writeBody(CodeWriter cw) throws IOException {

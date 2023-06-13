@@ -5,6 +5,9 @@ import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseTempl
 import com.sdadas.spring2ts.core.typescript.def.TSFunctionDef;
 
 import java.io.IOException;
+import java.util.Set;
+
+import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRequestBuilder.METHODS;
 
 /**
  * @author Sławomir Dadas
@@ -22,12 +25,19 @@ public class TSReactTemplate extends TSBaseTemplate {
     }
 
 
-    protected void createImports() {
+    protected void createImports(Set<String> importUsed) {
         String request="@/utils/request";
         //import { post, get, postJson } from '@/utils/request';
-        typeMapper.imports("post", request);
-        typeMapper.imports("get", request);
-        typeMapper.imports("postJson", request);
+
+        METHODS.forEach(method -> {
+            if(importUsed.contains(method)) {
+                typeMapper.imports(method, request);
+            }
+        });
+
+//        typeMapper.imports("post", request);
+//        typeMapper.imports("get", request);
+//        typeMapper.imports("postJson", request);
 
         String constant="../constant";
         //import { post, get, postJson } from '@/utils/request';

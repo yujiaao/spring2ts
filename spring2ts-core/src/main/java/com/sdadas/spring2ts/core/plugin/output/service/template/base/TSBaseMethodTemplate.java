@@ -155,6 +155,7 @@ public class TSBaseMethodTemplate {
             builder.add(arg, entry.getKey());
         }
         res.body(builder);
+
     }
 
     private String getPath() {
@@ -203,7 +204,7 @@ public class TSBaseMethodTemplate {
         }
     }
 
-    class AdditionalOptions {
+    static class AdditionalOptions {
 
         private Map<AdditionalOption, String> options = Maps.newLinkedHashMap();
 

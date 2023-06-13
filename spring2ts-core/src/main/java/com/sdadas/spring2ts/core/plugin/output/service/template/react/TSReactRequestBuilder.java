@@ -1,18 +1,10 @@
 package com.sdadas.spring2ts.core.plugin.output.service.template.react;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParam;
-import com.sdadas.spring2ts.core.plugin.output.service.params.ServiceParamType;
-import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseMethodTemplate;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRequestBuilder;
-import com.sdadas.spring2ts.core.typescript.def.TSVarDef;
-import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.writer.CodeWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
@@ -28,7 +20,6 @@ import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBa
  * @author Sławomir Dadas
  */
 public class TSReactRequestBuilder extends TSRequestBuilder {
-
 
     /**
      *
@@ -128,25 +119,9 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
     }
 
     private void writeMethod(CodeWriter cw) throws IOException {
-        Optional<TSRequestBuilder.Param> param = getHttpMethodParam();
-        String methodName;
-        if(param.isPresent()  && !this.method.name().equals("POST")) {
-            methodName = this.method.name().toLowerCase();
-        } else {
-            methodName = this.method.name();
-
-            if(methodName.equals(HttpMethod.POST.name())
-                    && params.values().stream().filter(v -> v.type== ParamType.Body).findAny().isPresent()) {
-                //todo ServiceParamType.HTTP_ENTITY || ServiceParamType.REQUEST_PART => postFile
-                // ServiceParamType.REQUEST_BODY ==> postJson
-                methodName = "postJson";
-            }else {
-                methodName = methodName.toLowerCase();
-            }
-        }
+        String methodName = getMethodName();
         cw.write(methodName).write("(");
     }
-
 
 
     private void writeBody(CodeWriter cw) throws IOException {

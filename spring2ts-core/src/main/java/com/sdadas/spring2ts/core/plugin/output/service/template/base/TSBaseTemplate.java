@@ -4,7 +4,7 @@ import com.sdadas.spring2ts.core.plugin.output.service.CommentAnnotationUtils;
 import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceRequestProps;
 import com.sdadas.spring2ts.core.typescript.types.VarType;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+
 import org.jboss.forge.roaster.model.JavaType;
 import org.springframework.core.io.ClassPathResource;
 import com.sdadas.spring2ts.core.plugin.output.OutputProcessor;
@@ -17,6 +17,8 @@ import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 import com.sdadas.spring2ts.core.typescript.types.BasicType;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Sławomir Dadas
@@ -26,6 +28,7 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
     public static final String CONTROLLER_PREFIX = "cp";
     public static final String SERVICE_PREFIX = "prefix";
     protected TypeMapper typeMapper;
+
 
     @Override
     public void init(TypeMapper mapper) throws IOException {
@@ -39,6 +42,7 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
     }
 
     protected void afterCreateMethod(TSFunctionDef method) {
+
     }
 
     protected void loadOutputFile(TypeMapper mapper, String classPath) throws IOException {
@@ -55,12 +59,20 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
     public TSWritable serviceClass(ServiceClass clazz) {
         TSClassDef res = createClass(clazz);
         afterCreateClass(res);
+        Set<String> importUsed = new HashSet<>();
         for (ServiceMethod method : clazz.getMethods()) {
             TSFunctionDef func = createMethod(method);
             afterCreateMethod(func);
             res.function(func);
+
+            String requestMethod = func.getImportUsed();
+
+            if(requestMethod!=null) {
+                importUsed.add(requestMethod);
+            }
         }
-        createImports();
+
+        createImports(importUsed);
         return res;
     }
 
@@ -88,7 +100,7 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         return res;
     }
 
-    protected void createImports() {
+    protected void createImports(Set<String> importUsed) {
         typeMapper.imports("Observable", "rxjs/Observable");
         typeMapper.imports(new TSImport("rxjs/Rx"));
         typeMapper.imports("RequestBuilder", "./RequestBuilder");
@@ -109,14 +121,23 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
                 .varType(VarType.CONST));
 
         afterCreateNameSpace(res);
+        Set<String> importUsed = new HashSet<>();
+
         for (ServiceMethod method : clazz.getMethods()) {
             TSFunctionDef func = createMethod(method);
             afterCreateMethod(func);
             res.function(func);
-        }
-        createImports();
-        return res;
 
+            String requestMethod = func.getImportUsed();
+
+            if(requestMethod!=null) {
+                System.out.println("function name="+ func.getName()+ "import: "+requestMethod);
+                importUsed.add(requestMethod);
+            }
+
+        }
+        createImports(importUsed);
+        return res;
     }
 
 }

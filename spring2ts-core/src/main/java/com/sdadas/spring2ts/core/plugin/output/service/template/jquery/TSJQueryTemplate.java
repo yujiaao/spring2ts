@@ -7,6 +7,7 @@ import com.sdadas.spring2ts.core.typescript.def.TSFunctionDef;
 import com.sdadas.spring2ts.core.typescript.def.TSImport;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author Sławomir Dadas
@@ -23,7 +24,7 @@ public class TSJQueryTemplate extends TSBaseTemplate {
         return new TSJQueryMethodTempate(method, typeMapper).createFunction();
     }
 
-    protected void createImports() {
+    protected void createImports(Set<String> importUsed) {
         typeMapper.imports("RequestBuilder", "./RequestBuilder");
         typeMapper.imports("HttpMethods", "./RequestBuilder");
         typeMapper.imports("ContentTypes", "./RequestBuilder");

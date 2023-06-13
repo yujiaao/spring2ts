@@ -1,6 +1,7 @@
 package com.sdadas.spring2ts.core.typescript.def;
 
 import com.google.common.base.Joiner;
+import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRequestBuilder;
 import org.apache.commons.lang3.StringUtils;
 import com.sdadas.spring2ts.core.typescript.expression.TSWritableString;
 import com.sdadas.spring2ts.core.typescript.types.BasicType;
@@ -10,10 +11,7 @@ import com.sdadas.spring2ts.core.typescript.writer.CodeWriter;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -32,6 +30,7 @@ public class TSFunctionDef implements TSWritable {
     private TSWritable body;
 
     private String comment;
+
 
     private EnumSet<TSModifier> modifiers = EnumSet.noneOf(TSModifier.class);
 
@@ -217,5 +216,12 @@ public class TSFunctionDef implements TSWritable {
         writer.openBlock();
         writer.write(body);
         writer.closeBlock();
+    }
+
+    public String getImportUsed() {
+        if(body instanceof TSRequestBuilder){
+            return ((TSRequestBuilder) body).getMethodName();
+        }
+        return null;
     }
 }
