@@ -43,4 +43,12 @@ public class HelloController {
                                      HelloDto his) {
         return new HelloResponse(id.incrementAndGet(), "Hello " + his.toString());
     }
+
+    /**
+     * this must bypass!
+     * @return number
+     */
+    private int getInt(){
+        return 1;
+    }
 }

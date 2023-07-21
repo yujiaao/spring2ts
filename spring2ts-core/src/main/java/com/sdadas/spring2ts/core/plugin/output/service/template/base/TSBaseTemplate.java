@@ -6,6 +6,7 @@ import com.sdadas.spring2ts.core.typescript.types.VarType;
 import org.apache.commons.io.IOUtils;
 
 import org.jboss.forge.roaster.model.JavaType;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.springframework.core.io.ClassPathResource;
 import com.sdadas.spring2ts.core.plugin.output.OutputProcessor;
 import com.sdadas.spring2ts.core.plugin.output.TypeMapper;
@@ -17,6 +18,7 @@ import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 import com.sdadas.spring2ts.core.typescript.types.BasicType;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,7 +53,7 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
             OutputProcessor processor = (OutputProcessor) mapper;
             String path = processor.getFilePath(resource.getFilename());
             TSFile file = processor.createNewFile(path);
-            file.loadContent(IOUtils.toString(resource.getInputStream()));
+            file.loadContent(IOUtils.toString(resource.getInputStream(),  Charset.defaultCharset()));
         }
     }
 
@@ -123,7 +125,22 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         afterCreateNameSpace(res);
         Set<String> importUsed = new HashSet<>();
 
+
+        Set<String> controllerAnnotations = Set.of("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping", "PatchMapping");
+
         for (ServiceMethod method : clazz.getMethods()) {
+
+            boolean needExport = false;
+            for(AnnotationSource<?> ann:  method.getMethod().getAnnotations()){
+                if (controllerAnnotations.contains(ann.getName())){
+                    needExport = true;
+                    break;
+                }
+            }
+            if(!needExport){
+                continue;
+            }
+
             TSFunctionDef func = createMethod(method);
             afterCreateMethod(func);
             res.function(func);
