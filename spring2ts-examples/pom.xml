@@ -35,7 +35,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sdadas.spring2ts</groupId>
+            <groupId>com.github.yujiaao.spring2ts</groupId>
             <artifactId>spring2ts-core</artifactId>
             <version>${project.version}</version>
         </dependency>
