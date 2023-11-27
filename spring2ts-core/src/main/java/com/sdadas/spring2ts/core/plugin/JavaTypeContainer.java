@@ -38,10 +38,14 @@ public class JavaTypeContainer {
     }
 
     public void parse(String file) {
-        JavaUnit unit = Roaster.parseUnit(file);
-        List<JavaType<?>> types = unit.getTopLevelTypes();
-        for (JavaType<?> type : types) {
-            cache(type);
+        try {
+            JavaUnit unit = Roaster.parseUnit(file);
+            List<JavaType<?>> types = unit.getTopLevelTypes();
+            for (JavaType<?> type : types) {
+                cache(type);
+            }
+        } catch (Exception ex) {
+            logger.warning("Error parsing file: " + file);
         }
     }
 
