@@ -3,7 +3,7 @@ package com.sdadas.spring2ts.examples;
 import com.sdadas.spring2ts.examples.simple.HelloResponse;
 import com.sdadas.spring2ts.test.ClientTester;
 import com.sdadas.spring2ts.test.JQueryClientBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

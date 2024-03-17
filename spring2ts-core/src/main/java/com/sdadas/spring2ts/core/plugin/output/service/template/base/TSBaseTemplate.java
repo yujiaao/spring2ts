@@ -19,6 +19,7 @@ import com.sdadas.spring2ts.core.typescript.types.BasicType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -126,7 +127,9 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         Set<String> importUsed = new HashSet<>();
 
 
-        Set<String> controllerAnnotations = Set.of("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping", "PatchMapping");
+        Set<String> controllerAnnotations = new HashSet<>(
+                Arrays.asList("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping", "PatchMapping")
+        );
 
         for (ServiceMethod method : clazz.getMethods()) {
 

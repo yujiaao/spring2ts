@@ -28,15 +28,15 @@ public class HelloController {
         return new HelloResponse(id.incrementAndGet(), "Hello " + name);
     }
 
-    @PostMapping("/hello-json")
-    public HelloResponse helloJson(  @Validated
+    @PostMapping("/hello-json1")
+    public HelloResponse helloJson1(  @Validated
                                      @ApiParam(value = "InfoCarRelations 数据对象", required = true)
                                      @RequestBody
                                      List<HelloDto> his) {
         return new HelloResponse(id.incrementAndGet(), "Hello " + his.size());
     }
 
-    @PostMapping("/hello-json")
+    @PostMapping("/hello-json2")
     public HelloResponse helloJson2(  @Validated
                                      @ApiParam(value = "InfoCarRelations 数据对象", required = true)
                                      @RequestBody

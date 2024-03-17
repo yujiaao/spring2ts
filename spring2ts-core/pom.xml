@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>spring2ts</artifactId>
         <groupId>com.github.yujiaao.spring2ts</groupId>
-        <version>1.1.9</version>
+        <version>1.1.13</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -14,20 +14,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.yujiaao.spring2ts</groupId>
-            <artifactId>spring2ts-annotations</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.jboss.forge.roaster</groupId>
+            <artifactId>roaster-api</artifactId>
+            <version>${version.roaster}</version>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.forge.roaster</groupId>
             <artifactId>roaster-jdt</artifactId>
+            <version>${version.roaster}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.jboss.forge.roaster</groupId>
-            <artifactId>roaster-api</artifactId>
-            <version>2.28.0.Final</version>
+            <groupId>com.github.yujiaao.spring2ts</groupId>
+            <artifactId>spring2ts-annotations</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -39,6 +41,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
         </dependency>
 
         <dependency>
@@ -53,9 +56,10 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

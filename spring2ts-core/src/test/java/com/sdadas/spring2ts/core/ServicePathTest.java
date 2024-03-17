@@ -15,9 +15,11 @@
 package com.sdadas.spring2ts.core;
 
 import com.google.common.collect.Sets;
-import org.junit.Assert;
-import org.junit.Test;
+
 import com.sdadas.spring2ts.core.plugin.output.service.method.ServicePath;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Sławomir Dadas
@@ -35,7 +37,7 @@ public class ServicePathTest {
 
     private void expect(String original, String result, String... variables) {
         ServicePath path = new ServicePath(original);
-        Assert.assertEquals(result, path.getSimplified());
-        Assert.assertEquals(path.getVariables(), Sets.newHashSet(variables));
+        assertEquals(result, path.getSimplified());
+        assertEquals(path.getVariables(), Sets.newHashSet(variables));
     }
 }

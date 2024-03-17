@@ -48,10 +48,12 @@ public class SourceGen {
     }
 
     private JavaTypeContainer scan(JavaTypeContainer container) throws IOException {
-        FluentIterable<File> iterable = Files.fileTreeTraverser()
-                .breadthFirstTraversal(inputDir)
-                .filter(f -> StringUtils.endsWithIgnoreCase(f.getName(), "java"));
+        Iterable<File> iterable = Files.fileTraverser()
+                .breadthFirst(inputDir);
         for (File file : iterable) {
+            if(!StringUtils.endsWithIgnoreCase(file.getName(), "java")){
+                continue;
+            }
             if(file.isDirectory()) continue;
             String src = Files.toString(file, Charsets.UTF_8);
             container.parse(src);

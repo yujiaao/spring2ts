@@ -88,7 +88,19 @@ public class TSModelOutput extends TSOutputProcessor {
 
     @Override
     public String getFilePath(JavaType<?> type) {
-        return "model/model.ts";
+        // get file name from "SharedModel" annotation's value, default to model.ts
+        String name = getAnnotationValue(type, "SharedModel", "value");
+        if(name == null || name.isEmpty()) {
+            return "model/model.ts";
+        }
+        return "model/" + name + ".ts";
+    }
+
+    private String getAnnotationValue(JavaType<?> type, String sharedModel, String value) {
+        JavaClassSource source = (JavaClassSource) type;
+        AnnotationSource<JavaClassSource> annotation = source.getAnnotation(sharedModel);
+        if(annotation == null) return null;
+        return annotation.getStringValue(value);
     }
 
     @Override
