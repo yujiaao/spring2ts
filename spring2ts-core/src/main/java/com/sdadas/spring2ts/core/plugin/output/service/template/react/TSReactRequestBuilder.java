@@ -3,6 +3,7 @@ package com.sdadas.spring2ts.core.plugin.output.service.template.react;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRequestBuilder;
+import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.writer.CodeWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +34,9 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
 
         String query = params.values().stream()
                 .filter(p-> p.is(ParamType.Query)|| p.is(ParamType.Model))
-                .map(param -> param.is(ParamType.Query) ? param.value : "..."+ param.value).collect(Collectors.joining(","));
+                .map(param -> param.is(ParamType.Query) || param.javaType.isPrimitive() ? param.value : "..."+ param.value)
+//                .map(param ->  param.value)
+                .collect(Collectors.joining(","));
 
         String queryUri = "const query='?'+"+params.values().stream()
                 .filter(p-> p.is(ParamType.Query) )
@@ -92,6 +95,7 @@ public class TSReactRequestBuilder extends TSRequestBuilder {
 
         cw.closeIndent();
     }
+
 
 
     private void handleModelAttributes(CodeWriter cw) throws IOException {

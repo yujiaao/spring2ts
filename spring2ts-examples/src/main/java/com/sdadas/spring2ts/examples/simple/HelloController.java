@@ -28,6 +28,11 @@ public class HelloController {
         return new HelloResponse(id.incrementAndGet(), "Hello " + name);
     }
 
+    @RequestMapping("/helloWithoutAtt")
+    public HelloResponse helloWithoutAtt(String name) {
+        return new HelloResponse(id.incrementAndGet(), "Hello " + name);
+    }
+
     @PostMapping("/hello-json1")
     public HelloResponse helloJson1(  @Validated
                                      @ApiParam(value = "InfoCarRelations 数据对象", required = true)
