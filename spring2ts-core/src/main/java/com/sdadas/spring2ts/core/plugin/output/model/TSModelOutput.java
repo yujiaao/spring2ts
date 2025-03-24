@@ -4,13 +4,17 @@ import com.sdadas.spring2ts.core.plugin.output.TSOutputProcessor;
 import com.sdadas.spring2ts.core.typescript.def.TSEnumDef;
 import com.sdadas.spring2ts.core.typescript.def.TSInterfaceDef;
 import com.sdadas.spring2ts.core.typescript.def.TSModifier;
+import com.sdadas.spring2ts.core.typescript.def.TSVarDef;
 import com.sdadas.spring2ts.core.typescript.types.CustomType;
 import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
+import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +46,17 @@ public class TSModelOutput extends TSOutputProcessor {
         ret.extendsType(toTSType(type.getSuperType(), context));
         ret.extendsTypes(toTSTypes(type.getInterfaces(), context));
         ret.modifiers(TSModifier.EXPORT);
+        
+        // 添加类级别的注释
+        String classComment = type.getJavaDoc() != null ? type.getJavaDoc().getFullText() : "";
+        String apiModelDesc = getAnnotationValue(type, "ApiModel", "description");
+        if (apiModelDesc != null && !apiModelDesc.isEmpty()) {
+            classComment = (classComment + "\n" + apiModelDesc).trim();
+        }
+        if (!classComment.isEmpty()) {
+            ret.comment(classComment);
+        }
+        
         ret.fields(createProperties(type.getProperties(), context));
         return ret;
     }
@@ -96,15 +111,46 @@ public class TSModelOutput extends TSOutputProcessor {
         return "model/" + name + ".ts";
     }
 
-    private String getAnnotationValue(JavaType<?> type, String sharedModel, String value) {
-        JavaClassSource source = (JavaClassSource) type;
-        AnnotationSource<JavaClassSource> annotation = source.getAnnotation(sharedModel);
-        if(annotation == null) return null;
-        return annotation.getStringValue(value);
+    private String getAnnotationValue(AnnotationTarget<?> target, String annotationName, String valueName) {
+        if (target == null || annotationName == null) return null;
+        try {
+            AnnotationSource<?> annotation = (AnnotationSource<?>) target.getAnnotation(annotationName);
+            if (annotation == null) return null;
+            return annotation.getStringValue(valueName);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
     public String getFilePath(String name) {
         return "model/" + name;
+    }
+
+    @Override
+    protected <O extends JavaSource<O>> List<TSVarDef> createProperties(List<PropertySource<O>> properties, TypeContext context) {
+        List<TSVarDef> result = new ArrayList<>();
+        for (PropertySource<O> property : properties) {
+            TSVarDef def = new TSVarDef();
+            def.name(property.getName());
+            def.type(toTSType(property.getType(), context));
+            
+            // 添加属性级别的注释
+            StringBuilder commentBuilder = new StringBuilder();
+            
+            // 获取ApiModelProperty注解的值
+            String apiModelPropertyValue = getAnnotationValue(property, "ApiModelProperty", "value");
+            if (apiModelPropertyValue != null && !apiModelPropertyValue.isEmpty()) {
+                commentBuilder.append(apiModelPropertyValue);
+            }
+            
+            String finalComment = commentBuilder.toString().trim();
+            if (!finalComment.isEmpty()) {
+                def.setComment(finalComment);
+            }
+            
+            result.add(def);
+        }
+        return result;
     }
 }

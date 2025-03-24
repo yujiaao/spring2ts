@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class TSInterfaceDef extends TSTypeDef<TSInterfaceDef> {
 
     private List<TypeName> extendsTypes = new ArrayList<>();
+    private String comment;
 
     public TSInterfaceDef extendsType(TypeName type) {
         this.extendsTypes.add(type);
@@ -33,8 +34,22 @@ public class TSInterfaceDef extends TSTypeDef<TSInterfaceDef> {
         return this;
     }
 
+    public TSInterfaceDef comment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
     @Override
     public void writeNameDef(CodeWriter writer) throws IOException {
+        if (StringUtils.isNotBlank(comment)) {
+            writer.write("/**\n");
+            writer.write(" * ").write(comment.replace("\n", "\n * ")).write("\n");
+            writer.write(" */\n");
+        }
         writer.write(TSModifier.getString(modifiers));
         writer.write("interface ");
         writer.write(name.toDeclaration());

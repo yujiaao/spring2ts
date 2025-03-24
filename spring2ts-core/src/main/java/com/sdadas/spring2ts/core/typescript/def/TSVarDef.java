@@ -29,6 +29,8 @@ public class TSVarDef implements TSWritable {
 
     private VarType varType = VarType.INSTANCE;
 
+    private String comment;
+
     public TSVarDef() {
     }
 
@@ -90,8 +92,21 @@ public class TSVarDef implements TSWritable {
         return this;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
     @Override
     public void write(CodeWriter writer) throws IOException {
+        if (comment != null && !comment.isEmpty()) {
+            writer.write("/**\n");
+            writer.write(" * ").write(comment.replace("\n", "\n * ")).write("\n");
+            writer.write(" */\n");
+        }
         if(!varType.equals(VarType.ARGUMENT)) writer.writeln();
         if(varType.equals(VarType.LOCAL)) {
             writer.write("let ");

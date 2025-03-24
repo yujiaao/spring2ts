@@ -1,6 +1,7 @@
 package com.sdadas.spring2ts.examples.simple;
 
 import com.sdadas.spring2ts.annotations.SharedModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Sławomir Dadas
@@ -8,6 +9,10 @@ import com.sdadas.spring2ts.annotations.SharedModel;
 @SharedModel
 public class HelloResponse {
 
+    /**
+     * 这里是id注释
+     */
+    @ApiModelProperty(value = "这里是id注解")
     private int id;
 
     private String greeting;

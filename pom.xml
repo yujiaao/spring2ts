@@ -7,7 +7,7 @@
     <groupId>com.github.yujiaao.spring2ts</groupId>
     <artifactId>spring2ts</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.16</version>
+    <version>1.1.18</version>
     <name>spring2ts</name>
     <description>Spring2TS</description>
     <url>https://github.com/yujiaao/spring2ts</url>
@@ -22,7 +22,6 @@
             <email>slawomir.dadas@opi.org.pl</email>
         </developer>
         <developer>
-
             <id>yujiaao</id>
             <name>Yujiaao</name>
             <email>yujiaao@msn.com</email>

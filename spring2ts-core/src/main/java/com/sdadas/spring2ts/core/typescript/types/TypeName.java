@@ -41,7 +41,7 @@ public interface TypeName {
 
     default boolean isGeneric() {
         List<String> generics = getGenerics();
-        return generics != null && generics.size() > 0;
+        return generics != null && !generics.isEmpty();
     }
 
     default String toDeclaration() {

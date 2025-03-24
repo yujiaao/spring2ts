@@ -63,6 +63,9 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         TSClassDef res = createClass(clazz);
         afterCreateClass(res);
         Set<String> importUsed = new HashSet<>();
+        Set<String> importResponseModels = new HashSet<>();
+
+
         for (ServiceMethod method : clazz.getMethods()) {
             TSFunctionDef func = createMethod(method);
             afterCreateMethod(func);
@@ -73,9 +76,12 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
             if(requestMethod!=null) {
                 importUsed.add(requestMethod);
             }
+//            if(func.getResponseModel()!=null) {
+////todo:
+//            }
         }
 
-        createImports(importUsed);
+        createImports(importUsed, importResponseModels);
         return res;
     }
 
@@ -103,7 +109,7 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         return res;
     }
 
-    protected void createImports(Set<String> importUsed) {
+    protected void createImports(Set<String> importUsed, Set<String> importModels) {
         typeMapper.imports("Observable", "rxjs/Observable");
         typeMapper.imports(new TSImport("rxjs/Rx"));
         typeMapper.imports("RequestBuilder", "./RequestBuilder");
@@ -131,6 +137,8 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
                 Arrays.asList("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping", "PatchMapping")
         );
 
+        Set<String> importResponseModels = new HashSet<>();
+
         for (ServiceMethod method : clazz.getMethods()) {
 
             boolean needExport = false;
@@ -156,7 +164,8 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
             }
 
         }
-        createImports(importUsed);
+
+        createImports(importUsed, importResponseModels);
         return res;
     }
 

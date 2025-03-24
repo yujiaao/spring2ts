@@ -4,6 +4,7 @@ import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseTemplate;
 import com.sdadas.spring2ts.core.typescript.def.TSFunctionDef;
 
+import javax.management.modelmbean.ModelMBeanInfoSupport;
 import java.io.IOException;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRe
  * @author Sławomir Dadas
  */
 public class TSReactTemplate extends TSBaseTemplate {
+
+    private static final String MODELS = "./models/models.ts";
 
     @Override
     protected void onInit() throws IOException {
@@ -25,7 +28,7 @@ public class TSReactTemplate extends TSBaseTemplate {
     }
 
 
-    protected void createImports(Set<String> importUsed) {
+    protected void createImports(Set<String> importUsed, Set<String> importModels) {
         String request="@/utils/request";
         //import { post, get, postJson } from '@/utils/request';
 
@@ -42,6 +45,7 @@ public class TSReactTemplate extends TSBaseTemplate {
         String constant="../constant";
         //import { post, get, postJson } from '@/utils/request';
         typeMapper.imports(SERVICE_PREFIX , constant);
+//        typeMapper.imports(MODELS, importModels);
 
     }
 }
