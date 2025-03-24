@@ -44,8 +44,8 @@ public class TSAngular2Template extends TSBaseTemplate {
     }
 
     @Override
-    protected void createImports(Set<String> importUsed) {
-        super.createImports( importUsed);
+    protected void createImports(Set<String> importUsed, Set<String> importModels) {
+        super.createImports( importUsed, importModels);
         typeMapper.imports("Injectable", "angular2/core");
         typeMapper.imports("Http", "angular2/http");
         typeMapper.imports("BaseRequestOptions", "angular2/http");
