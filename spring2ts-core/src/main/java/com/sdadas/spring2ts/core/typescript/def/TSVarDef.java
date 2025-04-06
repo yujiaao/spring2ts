@@ -21,7 +21,7 @@ public class TSVarDef implements TSWritable {
 
     private String initialization;
 
-    private EnumSet<TSModifier> modifiers = EnumSet.noneOf(TSModifier.class);
+    private final EnumSet<TSModifier> modifiers = EnumSet.noneOf(TSModifier.class);
 
     private boolean optional;
 
@@ -103,9 +103,9 @@ public class TSVarDef implements TSWritable {
     @Override
     public void write(CodeWriter writer) throws IOException {
         if (comment != null && !comment.isEmpty()) {
-            writer.write("/**\n");
+            writer.write("\n/**\n");
             writer.write(" * ").write(comment.replace("\n", "\n * ")).write("\n");
-            writer.write(" */\n");
+            writer.write(" */");
         }
         if(!varType.equals(VarType.ARGUMENT)) writer.writeln();
         if(varType.equals(VarType.LOCAL)) {

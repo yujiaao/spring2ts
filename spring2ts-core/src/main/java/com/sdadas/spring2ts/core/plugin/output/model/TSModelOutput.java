@@ -1,20 +1,17 @@
 package com.sdadas.spring2ts.core.plugin.output.model;
 
 import com.sdadas.spring2ts.core.plugin.output.TSOutputProcessor;
-import com.sdadas.spring2ts.core.typescript.def.TSEnumDef;
-import com.sdadas.spring2ts.core.typescript.def.TSInterfaceDef;
-import com.sdadas.spring2ts.core.typescript.def.TSModifier;
-import com.sdadas.spring2ts.core.typescript.def.TSVarDef;
+import com.sdadas.spring2ts.core.typescript.def.*;
 import com.sdadas.spring2ts.core.typescript.types.CustomType;
 import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -138,9 +135,33 @@ public class TSModelOutput extends TSOutputProcessor {
             // 添加属性级别的注释
             StringBuilder commentBuilder = new StringBuilder();
             
+            // 获取字段的JavaDoc注释
+            FieldSource<?> field = property.getField();
+            if (field != null && field.hasJavaDoc()) {
+                String fieldJavaDoc = field.getJavaDoc().getFullText();
+                if (StringUtils.isNotBlank(fieldJavaDoc)) {
+                    commentBuilder.append(fieldJavaDoc);
+                }
+            }
+            
+            // 获取访问器方法的JavaDoc注释
+            MethodSource<?> accessor = property.getAccessor();
+            if (accessor != null && accessor.hasJavaDoc()) {
+                String javaDoc = accessor.getJavaDoc().getFullText();
+                if (StringUtils.isNotBlank(javaDoc)) {
+                    if (!commentBuilder.isEmpty()) {
+                        commentBuilder.append("\n");
+                    }
+                    commentBuilder.append(javaDoc);
+                }
+            }
+            
             // 获取ApiModelProperty注解的值
             String apiModelPropertyValue = getAnnotationValue(property, "ApiModelProperty", "value");
             if (apiModelPropertyValue != null && !apiModelPropertyValue.isEmpty()) {
+                if (!commentBuilder.isEmpty()) {
+                    commentBuilder.append("\n");
+                }
                 commentBuilder.append(apiModelPropertyValue);
             }
             
