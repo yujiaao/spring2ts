@@ -3,7 +3,6 @@ package com.sdadas.spring2ts.core.plugin.output.service.template.react;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSRequestBuilder;
-import com.sdadas.spring2ts.core.typescript.types.TypeName;
 import com.sdadas.spring2ts.core.typescript.writer.CodeWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +13,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.ImmutableSet.of;
 import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseTemplate.CONTROLLER_PREFIX;
 
 /**

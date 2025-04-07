@@ -4,7 +4,6 @@ import com.sdadas.spring2ts.core.plugin.output.service.method.ServiceMethod;
 import com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseTemplate;
 import com.sdadas.spring2ts.core.typescript.def.TSFunctionDef;
 
-import javax.management.modelmbean.ModelMBeanInfoSupport;
 import java.io.IOException;
 import java.util.Set;
 
