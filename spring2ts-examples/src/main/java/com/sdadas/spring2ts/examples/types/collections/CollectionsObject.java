@@ -44,6 +44,8 @@ public class CollectionsObject {
 
     private NavigableMap<String, String> map6;
 
+    private Map<String, Number> numberMap;
+
     private Queue<String> queue1;
 
     private PriorityQueue<String> queue2;
@@ -184,6 +186,14 @@ public class CollectionsObject {
 
     public void setMap6(NavigableMap<String, String> map6) {
         this.map6 = map6;
+    }
+
+    public Map<String, Number> getNumberMap() {
+        return numberMap;
+    }
+
+    public void setNumberMap(Map<String, Number> numberMap) {
+        this.numberMap = numberMap;
     }
 
     public Queue<String> getQueue1() {

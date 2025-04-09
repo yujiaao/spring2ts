@@ -100,6 +100,12 @@ public class JavaTypescriptTypeMapping {
             res.setArrayDimensions(res.getArrayDimensions() + 1);
             return res;
         } else if(javaOtherCollectionNames.contains(canonical)) {
+            List<String> params = getGenericParams(name);
+            if (params.size() == 2) {
+                String keyType = getType(params.get(0), context).toDeclaration();
+                String valueType = getType(params.get(1), context).toDeclaration();
+                return new CustomType("Record", keyType + ", " + valueType);
+            }
             return new CustomType(ANY_TYPE);
         } else {
             List<String> names = getGenericParams(name);
@@ -134,6 +140,8 @@ public class JavaTypescriptTypeMapping {
         map.put("java.lang.Float", "number");
         map.put("java.lang.Double", "number");
         map.put("java.lang.Boolean", "boolean");
+        map.put("java.lang.Number", "number");
+        map.put("Number", "number");
         map.put("Byte", "number");
         map.put("Short", "number");
         map.put("Integer", "number");
