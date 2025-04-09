@@ -148,7 +148,9 @@ public class TSModelOutput extends TSOutputProcessor {
             MethodSource<?> accessor = property.getAccessor();
             if (accessor != null && accessor.hasJavaDoc()) {
                 String javaDoc = accessor.getJavaDoc().getFullText();
-                if (StringUtils.isNotBlank(javaDoc)) {
+                if (StringUtils.isNotBlank(javaDoc)
+                && commentBuilder.indexOf(javaDoc) == -1
+                ) {
                     if (!commentBuilder.isEmpty()) {
                         commentBuilder.append("\n");
                     }
@@ -158,7 +160,9 @@ public class TSModelOutput extends TSOutputProcessor {
             
             // 获取ApiModelProperty注解的值
             String apiModelPropertyValue = getAnnotationValue(property, "ApiModelProperty", "value");
-            if (apiModelPropertyValue != null && !apiModelPropertyValue.isEmpty()) {
+            if (apiModelPropertyValue != null && !apiModelPropertyValue.isEmpty()
+            && commentBuilder.indexOf(apiModelPropertyValue) == -1
+            ) {
                 if (!commentBuilder.isEmpty()) {
                     commentBuilder.append("\n");
                 }
