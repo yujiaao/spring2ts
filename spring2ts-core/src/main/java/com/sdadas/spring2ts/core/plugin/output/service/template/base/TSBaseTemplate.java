@@ -125,8 +125,14 @@ public abstract class TSBaseTemplate implements TSServiceTemplate {
         TSNameSpaceDef res = createNameSpace(clazz);
         ServiceRequestProps props = ServiceMethod.createProps(clazz.getType());
 
+        String path = props.getPaths().isEmpty()?"":props.getPaths().get(0).getPath();
+        if(!path.startsWith("/")) {
+            path = "/" + path;
+        }
+
+
         res.globalVariable(new TSVarDef(CONTROLLER_PREFIX, BasicType.STRING,
-                " "+SERVICE_PREFIX+" + '"+(props.getPaths().isEmpty()?"":props.getPaths().get(0).getPath())+"'")
+                " "+SERVICE_PREFIX+" + '"+path+"'")
                 .varType(VarType.CONST));
 
         afterCreateNameSpace(res);

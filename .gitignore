@@ -18,3 +18,4 @@ jspm_modules
 jspm_packages
 node
 typings
+.vscode
