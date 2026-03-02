@@ -4,18 +4,15 @@ import com.sdadas.spring2ts.examples.simple.HelloResponse;
 import com.sdadas.spring2ts.test.ClientTester;
 import com.sdadas.spring2ts.test.JQueryClientBuilder;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
 /**
  * @author Sławomir Dadas
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {Application.class})
 public class ExamplesClientServerTests {
 

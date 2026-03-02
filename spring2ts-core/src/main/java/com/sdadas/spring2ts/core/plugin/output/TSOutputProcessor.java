@@ -1,7 +1,5 @@
 package com.sdadas.spring2ts.core.plugin.output;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.sdadas.spring2ts.core.plugin.OutputType;
 import com.sdadas.spring2ts.core.plugin.output.model.TypeContext;
 import org.apache.commons.io.FileUtils;
@@ -24,11 +22,12 @@ import com.sdadas.spring2ts.core.typescript.writer.TSWritable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.sdadas.spring2ts.core.plugin.output.service.template.base.TSBaseMethodTemplate.logger;
@@ -86,7 +85,7 @@ public abstract class TSOutputProcessor implements OutputProcessor, TypeMapper {
         PrintWriter writer = null;
         try{
             FileUtils.forceMkdir(output.getParentFile());
-            writer = new PrintWriter(new FileOutputStream(output, true));
+            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(output, true), StandardCharsets.UTF_8));
             CodeWriter cw = new CodeWriter(writer);
             file.write(cw);
         } catch (IOException ex) {
