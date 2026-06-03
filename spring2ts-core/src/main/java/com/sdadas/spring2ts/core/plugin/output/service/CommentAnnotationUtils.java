@@ -6,6 +6,10 @@ import com.sdadas.spring2ts.core.utils.AnnotationUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.forge.roaster.model.AnnotationTarget;
 import org.jboss.forge.roaster.model.JavaType;
@@ -16,16 +20,32 @@ import java.util.stream.Collectors;
 public class CommentAnnotationUtils {
 
     public static void extractedComment(AnnotationTarget<?> type, Multimap<String, String> mapAll) {
+        // Swagger 1.x annotations
         Arrays.stream(new Class[] {ApiOperation.class, Api.class}).forEach(annotation ->{
             Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
-            if(map1!=null) {
+            if(map1!=null && !map1.isEmpty()) {
                 mapAll.put("comment",toString(map1));
             }
         });
 
         Arrays.stream(new Class[] {ApiParam.class}).forEach(annotation ->{
             Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
-            if(map1!=null) {
+            if(map1!=null && !map1.isEmpty()) {
+                mapAll.put("description",toString(map1));
+            }
+        });
+
+        // Springdoc / Swagger 3.x annotations
+        Arrays.stream(new Class[] {Operation.class, Tag.class}).forEach(annotation ->{
+            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
+            if(map1!=null && !map1.isEmpty()) {
+                mapAll.put("comment",toString(map1));
+            }
+        });
+
+        Arrays.stream(new Class[] {Parameter.class, Schema.class}).forEach(annotation ->{
+            Multimap<String, String> map1 = AnnotationUtils.getAnnotationAsMap(type, annotation);
+            if(map1!=null && !map1.isEmpty()) {
                 mapAll.put("description",toString(map1));
             }
         });

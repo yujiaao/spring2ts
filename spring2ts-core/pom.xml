@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring2ts</artifactId>
         <groupId>com.github.yujiaao.spring2ts</groupId>
-        <version>1.1.25</version>
+        <version>1.1.26</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -65,6 +65,11 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
         </dependency>
 
         <dependency>

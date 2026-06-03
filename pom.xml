@@ -7,7 +7,7 @@
     <groupId>com.github.yujiaao.spring2ts</groupId>
     <artifactId>spring2ts</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.25</version>
+    <version>1.1.26</version>
     <name>spring2ts</name>
     <description>Spring2TS</description>
     <url>https://github.com/yujiaao/spring2ts</url>
@@ -138,6 +138,12 @@
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>1.6.9</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>2.2.15</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
